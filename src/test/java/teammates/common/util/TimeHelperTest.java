@@ -30,14 +30,17 @@ public class TimeHelperTest extends BaseTestCase {
     public void testFormatDateTimeForDisplay() {
         String zoneId = "UTC";
         Instant instant = LocalDateTime.of(2015, Month.NOVEMBER, 30, 12, 0).atZone(ZoneId.of(zoneId)).toInstant();
-        assertEquals("Mon, 30 Nov 2015, 12:00 NOON UTC", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+        assertEquals("Mon, 30 Nov 2015, 12:00 NOON UTC",
+                TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
 
         zoneId = "Asia/Singapore";
         instant = LocalDateTime.of(2015, Month.NOVEMBER, 30, 16, 0).atZone(ZoneId.of(zoneId)).toInstant();
-        assertEquals("Mon, 30 Nov 2015, 04:00 PM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+        assertEquals("Mon, 30 Nov 2015, 04:00 PM SGT",
+                TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
 
         instant = LocalDateTime.of(2015, Month.NOVEMBER, 30, 4, 0).atZone(ZoneId.of(zoneId)).toInstant();
-        assertEquals("Mon, 30 Nov 2015, 04:00 AM SGT", TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
+        assertEquals("Mon, 30 Nov 2015, 04:00 AM SGT",
+                TimeHelper.formatInstant(instant, zoneId, DATETIME_DISPLAY_FORMAT));
     }
 
     @Test
@@ -53,7 +56,8 @@ public class TimeHelperTest extends BaseTestCase {
         assertEquals("Mon, 30 Nov 2015, 12:00 AM UTC",
                 TimeHelper.formatInstant(forwardAdjusted, zoneId, DATETIME_DISPLAY_FORMAT));
 
-        Instant instantAt2359 = LocalDateTime.of(2015, Month.NOVEMBER, 29, 23, 59).atZone(ZoneId.of(zoneId)).toInstant();
+        Instant instantAt2359 = LocalDateTime.of(2015, Month.NOVEMBER, 29, 23, 59).atZone(ZoneId.of(zoneId))
+                .toInstant();
 
         backwardAdjusted = TimeHelper.getMidnightAdjustedInstantBasedOnZone(instantAt2359, zoneId, false);
         assertEquals("Sun, 29 Nov 2015, 11:59 PM UTC",
@@ -130,4 +134,19 @@ public class TimeHelperTest extends BaseTestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void testFormatInstant() {
+        // Test null inputs
+        assertEquals("", TimeHelper.formatInstant(null, null, null));
+
+        // Test DateTime with NOON
+        LocalDateTime dateTimeWithNoon = LocalDateTime.of(2017, Month.NOVEMBER, 30, 12, 0);
+        Instant instantWithNoon = dateTimeWithNoon.atZone(ZoneId.of("GMT")).toInstant();
+        assertEquals("Thu, 30 Nov 2017, 12:00 NOON GMT", TimeHelper.formatInstant(instantWithNoon, "GMT", "hh:mm a"));
+
+        // Test DateTime without NOON
+        LocalDateTime dateTimeWithoutNoon = LocalDateTime.of(2017, Month.NOVEMBER, 30, 11, 59);
+        Instant instantWithoutNoon = dateTimeWithoutNoon.atZone(ZoneId.of("GMT")).toInstant();
+        assertEquals("Thu, 30 Nov 2017, 11:59 AM GMT", TimeHelper.formatInstant(instantWithoutNoon, "GMT", "hh:mm a"));
+    }
 }
