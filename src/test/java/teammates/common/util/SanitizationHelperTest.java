@@ -123,4 +123,73 @@ public class SanitizationHelperTest extends BaseTestCase {
         assertEquals(expectedRichText, sanitized);
     }
 
+    //    @Test
+//    public void populateTemplate_ReplaceStringValues_ReturnsPopulatedTemplate() {
+//        String template = "Hello {{name}}, your age is {{age}}.";
+//        String name = "John Doe";
+//        String age = "30";
+//
+//        String result = populateTemplate(template, "{{name}}", name, "{{age}}", age);
+//
+//        String expected = "Hello John Doe, your age is 30.";
+//        assertEquals(expected, result);
+//    }
+
+    @Test
+    public void populateTemplate_ReplaceStringAndObjectValues_ReturnsPopulatedTemplate() {
+        String template = "Hello {{name}}, your age is {{age}}.";
+        String name = "John Doe";
+        int age = 30;
+
+        String result = populateTemplate4(template, "{{name}}", name, "{{age}}", age);
+
+        String expected = "Hello John Doe, your age is 30.";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void populateTemplate_InvalidKeyValuePairsLength_ThrowsAssertionError() {
+        String template = "Hello {{name}}, your age is {{age}}.";
+        String name = "John Doe";
+
+        assertThrows(AssertionError.class, () -> populateTemplate(template, "{{name}}", name, "{{age}}"));
+    }
+
+    @Test
+    public void populateTemplate_ReplaceWithNullValues_ReturnsPopulatedTemplateWithNulls() {
+        String template = "Hello {{name}}, your age is {{age}}.";
+        String name = null;
+        int age = 30;
+
+        String result = populateTemplate(template, "{{name}}", name, "{{age}}", age);
+
+        String expected = "Hello null, your age is 30.";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void populateTemplate_ReplaceWithMultipleOccurrences_ReturnsPopulatedTemplateWithAllReplacements() {
+        String template = "Hello {{name}}, your name is {{name}}.";
+        String name = "John Doe";
+
+        String result = populateTemplate(template, "{{name}}", name);
+
+        String expected = "Hello John Doe, your name is John Doe.";
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void populateTemplate_ReplaceWithEmptyString_ReturnsPopulatedTemplateWithEmptyString() {
+        String template = "Hello {{name}}.";
+        String name = "";
+
+        String result = populateTemplate5(template, "{{name}}", name);
+
+        String expected = "Hello .";
+        assertEquals(expected, result);
+    }
+
+
+
+
 }

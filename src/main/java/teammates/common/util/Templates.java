@@ -94,4 +94,66 @@ public final class Templates {
                 FileHelper.readResourceFile("userEmailTemplate-deadlineExtension.html");
     }
 
+
+    public static String populateTemplate2(String template, Object... keyValuePairs) {
+        assert keyValuePairs.length % 2 == 0 : "The number of elements in keyValuePairs passed in must be even";
+
+        String populatedTemplate = template;
+        for (int i = 0; i < keyValuePairs.length; i += 2) {
+            Object key = keyValuePairs[i];
+            Object value = keyValuePairs[i + 1];
+            populatedTemplate = populatedTemplate.replace(key.toString(), value.toString());
+        }
+        return populatedTemplate;
+    }
+
+    public static String populateTemplate3(String template, Object... keyValuePairs) {
+        assert keyValuePairs.length % 2 == 0 : "The number of elements in keyValuePairs passed in must be even";
+
+        String populatedTemplate = template;
+        for (int i = 0; i < keyValuePairs.length; i += 2) {
+            Object key = keyValuePairs[i];
+            Object value = keyValuePairs[i + 1];
+            if (value != null) {
+                populatedTemplate = populatedTemplate.replace(key.toString(), value.toString());
+            } else {
+                populatedTemplate = populatedTemplate.replace(key.toString(), "null");
+            }
+        }
+        return populatedTemplate;
+    }
+
+    public static String populateTemplate4(String template, Object... keyValuePairs) {
+        assert keyValuePairs.length % 2 == 0 : "The number of elements in keyValuePairs passed in must be even";
+
+        String populatedTemplate = template;
+        for (int i = 0; i < keyValuePairs.length; i += 2) {
+            Object key = keyValuePairs[i];
+            Object value = keyValuePairs[i + 1];
+            if (value != null) {
+                String replacement = value.toString();
+                populatedTemplate = populatedTemplate.replaceAll("\\{\\{" + key.toString() + "\\}\\}", replacement);
+            }
+        }
+        return populatedTemplate;
+    }
+
+    public static String populateTemplate(String template, Object... keyValuePairs) {
+        assert keyValuePairs.length % 2 == 0 : "The number of elements in keyValuePairs passed in must be even";
+
+        String populatedTemplate = template;
+        for (int i = 0; i < keyValuePairs.length; i += 2) {
+            Object key = keyValuePairs[i];
+            Object value = keyValuePairs[i + 1];
+            if (value != null) {
+                String replacement = value.toString();
+                populatedTemplate = populatedTemplate.replaceAll("\\{\\{" + key.toString() + "\\}\\}", replacement);
+            } else {
+                populatedTemplate = populatedTemplate.replaceAll("\\{\\{" + key.toString() + "\\}\\}", "");
+            }
+        }
+        return populatedTemplate;
+    }
+
+
 }
